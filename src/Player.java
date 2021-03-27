@@ -1,5 +1,7 @@
 abstract class Player {
     protected String name;
+    protected Player[] players = new Player[50];
+    protected int counter = 0;
     protected int numberOfVotes;
     protected boolean isAlive;
     protected boolean isMafia;
@@ -12,6 +14,7 @@ abstract class Player {
     protected boolean isSilencer;
     protected boolean savedByDoctor;
     protected boolean getShot;
+    protected boolean haveNightJob;
     Player(String name){
         this.name = name;
     }
@@ -110,5 +113,13 @@ abstract class Player {
 
     public void setGetShot(boolean getShot) {
         this.getShot = getShot;
+    }
+
+    public boolean isHaveNightJob() {
+        return haveNightJob;
+    }
+
+    public void setHaveNightJob(boolean haveNightJob) {
+        this.haveNightJob = haveNightJob;
     }
 }
