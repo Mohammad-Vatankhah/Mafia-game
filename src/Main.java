@@ -61,20 +61,34 @@ public class Main {
                 }
                 if (roleToAssign.equals("joker"))
                     players[i] = new Joker(nameToAssign);
-                else if (roleToAssign.equals("villager"))
+                else if (roleToAssign.equals("villager")) {
                     players[i] = new Villager(nameToAssign);
-                else if (roleToAssign.equals("detective"))
+                    numberOfVillagers++;
+                }
+                else if (roleToAssign.equals("detective")) {
                     players[i] = new Detective(nameToAssign);
-                else if (roleToAssign.equals("doctor"))
+                    numberOfVillagers++;
+                }
+                else if (roleToAssign.equals("doctor")) {
                     players[i] = new Doctor(nameToAssign);
-                else if (roleToAssign.equals("bulletproof"))
+                    numberOfVillagers++;
+                }
+                else if (roleToAssign.equals("bulletproof")) {
                     players[i] = new Bulletproof(nameToAssign);
-                else if (roleToAssign.equals("mafia"))
+                    numberOfVillagers++;
+                }
+                else if (roleToAssign.equals("mafia")) {
                     players[i] = new Mafia(nameToAssign);
-                else if (roleToAssign.equals("godfather"))
+                    numberOfMafias++;
+                }
+                else if (roleToAssign.equals("godfather")) {
                     players[i] = new Godfather(nameToAssign);
-                else if (roleToAssign.equals("silencer"))
+                    numberOfMafias++;
+                }
+                else if (roleToAssign.equals("silencer")) {
                     players[i] = new Silencer(nameToAssign);
+                    numberOfMafias++;
+                }
             }
         i++;
         }
@@ -87,5 +101,76 @@ public class Main {
             System.out.println(ANSI_RESET + players[i].name + " : " + players[i].getRole());
         }
         System.out.println(ANSI_RED + "Ready?" + ANSI_YELLOW + " Set!" + ANSI_GREEN + " Go.");
+        String voteOrder;
+        String[] voterAndVotee;
+        while (true){
+            int r = 0;
+            System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
+            while (true){
+                int voterReminder = 0;
+                int voteeReminder = 0;
+                voteOrder = scan.nextLine();
+                if (voteOrder.equals("end_vote"))
+                    break;
+                else {
+                    voterAndVotee = voteOrder.split(" ");
+                    for (int i = 0; i < players.length; i++) {
+                        if (!voterAndVotee[0].equals(players[i].name) || !voterAndVotee[1].equals(players[i].name)) {
+                            r++;
+                        }
+                        if (r == namesArr.length) {
+                            System.out.println(ANSI_RED + "user not found");
+                        }
+                        if (voterAndVotee[0].equals(players[i].name))
+                            voterReminder = i;
+                        if (voterAndVotee[1].equals(players[i].name))
+                            voteeReminder = i;
+                    }
+                    if (players[voterReminder].isSilence())
+                        System.out.println(ANSI_RED + "voter is silenced");
+                    else if (!players[voteeReminder].isAlive())
+                        System.out.println(ANSI_RED + "votee already dead");
+                    else players[voteeReminder].setNumberOfVotes(players[voteeReminder].getNumberOfVotes() + 1);
+                }
+                int maxVote = 0;
+                int maxVotePlayer = 0;
+                for (int i = 0; i < players.length; i++) {
+                    if (players[i].getNumberOfVotes() > maxVote) {
+                        maxVote = players[i].getNumberOfVotes();
+                        maxVotePlayer = i;
+                    }
+                }
+                int numberOfMaxVotePlayers = 0;
+                for (Player player : players) {
+                    if (player.getNumberOfVotes() == maxVote)
+                        numberOfMaxVotePlayers++;
+                }
+                if (numberOfMaxVotePlayers > 1)
+                    System.out.println(ANSI_YELLOW + "nobody died");
+                else if (numberOfMaxVotePlayers == 1){
+                    if (players[maxVotePlayer].getRole().equals("joker")) {
+                        System.out.println(ANSI_YELLOW + "Joker WON!");
+                        System.exit(0);
+                    }
+                    else {
+                        players[maxVotePlayer].setAlive(false);
+                        if (players[maxVotePlayer].isMafia())
+                            numberOfMafias--;
+                        else if (players[maxVotePlayer].isVillager()) {
+                            numberOfVillagers--;
+                            System.out.println(ANSI_RESET + players[maxVotePlayer].name + ANSI_RED + " died");
+                        }
+                    }
+                    if (numberOfMafias == 0) {
+                        System.out.println(ANSI_GREEN + "Villagers WON!");
+                        System.exit(0);
+                    }
+                    else if (numberOfVillagers <= numberOfMafias) {
+                        System.out.println(ANSI_RED + "Mafia Won");
+                        System.exit(0);
+                    }
+                }
+            }
+        }
     }
 }
