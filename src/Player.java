@@ -23,7 +23,7 @@ abstract class Player {
         return numberOfVotes;
     }
 
-    public void addNumberOfVotes(int numberOfVotes) {
+    public void setNumberOfVotes(int numberOfVotes) {
         this.numberOfVotes = numberOfVotes;
     }
 
