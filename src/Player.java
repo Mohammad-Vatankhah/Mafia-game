@@ -20,8 +20,8 @@ abstract class Player {
         return numberOfVotes;
     }
 
-    public void addNumberOfVotes() {
-        this.numberOfVotes += 1;
+    public void addNumberOfVotes(int numberOfVotes) {
+        this.numberOfVotes = numberOfVotes;
     }
 
     public boolean isAlive() {
