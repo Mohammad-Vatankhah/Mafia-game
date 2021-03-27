@@ -1,8 +1,8 @@
 class Bulletproof extends Player{
     Bulletproof(String name){
-        players[counter] = new Player(name);
-        players[counter].setBulletproof(true);
-        players[counter].setAlive(true);
-        players[counter++].setVillager(true);
+        this.name = name;
+        this.setBulletproof(true);
+        this.setAlive(true);
+        this.setVillager(true);
     }
 }

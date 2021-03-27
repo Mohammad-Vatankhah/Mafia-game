@@ -1,6 +1,5 @@
 class Player {
     protected String name;
-    protected Player[] players;
     protected int counter = 0;
     protected int numberOfVotes;
     protected boolean isAlive;
