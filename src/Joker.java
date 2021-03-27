@@ -3,5 +3,6 @@ class Joker extends Player{
         this.name = name;
         this.setJoker(true);
         this.setAlive(true);
+        this.setRole("joker");
     }
 }

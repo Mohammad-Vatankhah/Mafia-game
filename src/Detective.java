@@ -5,6 +5,7 @@ class Detective extends Player{
         this.setVillager(true);
         this.setAlive(true);
         this.setHaveNightJob(true);
+        this.setRole("detective");
     }
     public void detect(String name){
         for (int i = 0; i < Main.players.length; i++) {

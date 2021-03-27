@@ -5,6 +5,7 @@ class Doctor extends Player{
         this.setAlive(true);
         this.setHaveNightJob(true);
         this.setVillager(true);
+        this.setRole("doctor");
     }
     public void save(String name){
         for (int i = 0; i < Main.players.length; i++) {

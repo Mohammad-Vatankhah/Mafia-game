@@ -4,6 +4,7 @@ class Mafia extends Player{
         this.setMafia(true);
         this.setHaveNightJob(true);
         this.setAlive(true);
+        this.setRole("mafia");
     }
     public void voteForShot(String name){
         for (int i = 0; i < Main.players.length; i++) {

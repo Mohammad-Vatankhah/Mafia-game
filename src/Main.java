@@ -20,29 +20,34 @@ public class Main {
         int nightCounter = 1;
         String[] roles = {"joker", "villager", "detective", "doctor", "bulletproof", "mafia", "godfather", "silencer"};
         String order;
-        System.out.println("Welcome to " + ANSI_RED + "MAFIA" + "\n" + ANSI_RESET + "Enter 'create_game' to start a new game");
+        System.out.println("Welcome to " + ANSI_RED + "MAFIA" + "\n" + ANSI_RESET + "Enter 'create_game' and players name to start a new game");
         order = scan.next();
+        String names = scan.nextLine();
+        String[] namesArr = names.split(" ");
         while (!order.equals("create_game")) {
             System.out.println(ANSI_RED + "no game created");
             order = scan.next();
         }
-        String names = scan.nextLine();
-        String[] namesArr = names.split(" ");
         String nameToAssign;
         String roleToAssign;
-        for (int i = 0; i < namesArr.length; ) {
+        players = new Player[namesArr.length];
+        System.out.println(ANSI_RESET + "Enter 'assign_role' (player_name) (role_name) to assign the roles.");
+        firstLoop:for (int i = 0; i < namesArr.length - 1; ) {
             int r = 0;
             order = scan.next();
+            while(order.equals("start_ game")){
+                System.out.println(ANSI_RED + "one or more player do not have a role.");
+                order = scan.next();
+            }
             nameToAssign = scan.next();
             roleToAssign = scan.next();
-            players = new Player[namesArr.length];
             for (String s : namesArr) {
                 if (!nameToAssign.equals(s)) {
                     r++;
                 }
                 if (r == namesArr.length) {
                     System.out.println(ANSI_RED + "user not found");
-                    continue;
+                    continue firstLoop;
                 }
             }
             r = 0;
@@ -52,7 +57,7 @@ public class Main {
                 }
                 if (r == roles.length) {
                     System.out.println(ANSI_RED + "role not found");
-                    continue;
+                    continue firstLoop;
                 }
                 if (roleToAssign.equals("joker"))
                     players[i] = new Joker(nameToAssign);
@@ -73,5 +78,14 @@ public class Main {
             }
         i++;
         }
+        System.out.println(ANSI_RESET + "Enter 'start_game' to start the game.");
+        order = scan.next();
+        if (!order.equals("start_game")){
+            System.out.println(ANSI_RED + "Wrong order!Try again.");
+        }
+        for (int i = 0; i < players.length - 1; i++) {
+            System.out.println(ANSI_RESET + players[i].name + " : " + players[i].getRole());
+        }
+        System.out.println(ANSI_RED + "Ready?" + ANSI_YELLOW + " Set!" + ANSI_GREEN + " Go.");
     }
 }

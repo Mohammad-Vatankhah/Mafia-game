@@ -1,6 +1,6 @@
 class Player {
     protected String name;
-    protected int counter = 0;
+    protected String role;
     protected int numberOfVotes;
     protected boolean isAlive;
     protected boolean isMafia;
@@ -131,5 +131,13 @@ class Player {
 
     public void setSilence(boolean silence) {
         this.silence = silence;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

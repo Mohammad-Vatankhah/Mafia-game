@@ -4,5 +4,6 @@ class Bulletproof extends Player{
         this.setBulletproof(true);
         this.setAlive(true);
         this.setVillager(true);
+        this.setRole("bulletproof");
     }
 }

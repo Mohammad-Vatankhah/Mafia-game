@@ -3,5 +3,6 @@ class Villager extends Player{
         this.name = name;
         this.setVillager(true);
         this.setAlive(true);
+        this.setRole("villager");
     }
 }

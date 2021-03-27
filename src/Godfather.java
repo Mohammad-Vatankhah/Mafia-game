@@ -5,5 +5,6 @@ class Godfather extends Player{
         this.setMafia(true);
         this.setHaveNightJob(true);
         this.setAlive(true);
+        this.setRole("godfather");
     }
 }
