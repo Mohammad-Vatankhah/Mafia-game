@@ -1,4 +1,5 @@
 class Mafia extends Player{
+    private boolean voted;
     Mafia(String name){
         this.name = name;
         this.setMafia(true);
@@ -6,10 +7,12 @@ class Mafia extends Player{
         this.setAlive(true);
         this.setRole("mafia");
     }
-    public void voteForShot(String name){
-        for (int i = 0; i < Main.players.length; i++) {
-            if (name.equals(Main.players[i].name))
-                Main.players[i].setNumberOfVotes(Main.players[i].getNumberOfVotes() + 1);
-        }
+
+    public boolean isVoted() {
+        return voted;
+    }
+
+    public void setVoted(boolean voted) {
+        this.voted = voted;
     }
 }

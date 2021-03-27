@@ -1,4 +1,5 @@
 class Detective extends Player{
+    protected boolean detected;
     Detective(String name){
         this.name = name;
         this.setDetective(true);
@@ -7,15 +8,13 @@ class Detective extends Player{
         this.setHaveNightJob(true);
         this.setRole("detective");
     }
-    public void detect(String name){
-        for (int i = 0; i < Main.players.length; i++) {
-            if (name.equals(Main.players[i].name)){
-                if (Main.players[i].isMafia() && !Main.players[i].isGodfather())
-                    System.out.println("Yes");
-                else
-                    System.out.println("No");
-            }
 
-        }
+    public boolean isDetected() {
+        return detected;
+    }
+
+    public void setDetected(boolean detected) {
+        this.detected = detected;
     }
 }
+

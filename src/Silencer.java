@@ -1,4 +1,5 @@
 class Silencer extends Player{
+    protected boolean silenced;
     Silencer(String name){
         this.name = name;
         this.setMafia(true);
@@ -12,5 +13,13 @@ class Silencer extends Player{
             if (name.equals(Main.players[i].name))
                 Main.players[i].setSilence(true);
         }
+    }
+
+    public boolean isSilenced() {
+        return silenced;
+    }
+
+    public void setSilenced(boolean silenced) {
+        this.silenced = silenced;
     }
 }

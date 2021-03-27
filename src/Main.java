@@ -18,6 +18,15 @@ public class Main {
         }
     }
 
+    public static boolean findUser(String name){
+        int r = 0;
+        for (int i = 0; i < players.length; i++) {
+            if (!name.equals(players[i].name))
+                r++;
+        }
+        return r != players.length;
+    }
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int numberOfVillagers = 0;
@@ -109,9 +118,9 @@ public class Main {
         System.out.println(ANSI_RED + "Ready?" + ANSI_YELLOW + " Set!" + ANSI_GREEN + " Go.");
         String voteOrder;
         String[] voterAndVotee;
+        System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
         while (true){
-            int r = 0;
-            System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
+            String silenced = "";
             while (true){
                 int voterReminder = 0;
                 int voteeReminder = 0;
@@ -120,17 +129,17 @@ public class Main {
                     break;
                 else {
                     voterAndVotee = voteOrder.split(" ");
-                    for (int i = 0; i < players.length; i++) {
-                        if (!voterAndVotee[0].equals(players[i].name) || !voterAndVotee[1].equals(players[i].name)) {
-                            r++;
+                    if (!findUser(voterAndVotee[0])) {
+                        System.out.println(ANSI_RED + "user not found");
+                        continue;
+                    }
+                    else {
+                        for (int i = 0; i < players.length; i++) {
+                            if (voterAndVotee[0].equals(players[i].name))
+                                voterReminder = i;
+                            if (voterAndVotee[1].equals(players[i].name))
+                                voteeReminder = i;
                         }
-                        if (r == namesArr.length) {
-                            System.out.println(ANSI_RED + "user not found");
-                        }
-                        if (voterAndVotee[0].equals(players[i].name))
-                            voterReminder = i;
-                        if (voterAndVotee[1].equals(players[i].name))
-                            voteeReminder = i;
                     }
                     if (players[voterReminder].isSilence())
                         System.out.println(ANSI_RED + "voter is silenced");
@@ -187,8 +196,10 @@ public class Main {
             String nightOrder;
             firstLoop:while (true){
                 nightOrder = scan.nextLine();
-                if (nightOrder.equals("end_night"))
+                if (nightOrder.equals("end_night")) {
+                    System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
                     break;
+                }
                 int subjectReminder = 0;
                 int objectReminder = 0;
                 String[] subjectAndObject = nightOrder.split(" ");
@@ -212,14 +223,60 @@ public class Main {
                         else objectReminder = i;
                     }
                 }
-                if (players[subjectReminder] instanceof Mafia)
-                    ((Mafia) players[subjectReminder]).voteForShot(subjectAndObject[1]);
+
+                if (players[subjectReminder] instanceof Silencer && !((Silencer) players[subjectReminder]).isSilenced()) {
+                    silenced = players[objectReminder].name;
+                    players[objectReminder].setSilence(true);
+                    ((Silencer) players[subjectReminder]).setSilenced(true);
+                }
+
+                else if (players[subjectReminder] instanceof Mafia){
+                    int shotPlayer = 0;
+                    if (!findUser(subjectAndObject[1])){
+                        System.out.println(ANSI_RED + "user not joined");
+                        continue firstLoop;
+                    }
+                    else {
+                        for (int i = 0; i < players.length; i++) {
+                            if (subjectAndObject[1].equals(players[i].name))
+                                shotPlayer = i;
+                        }
+                        if (!players[shotPlayer].isAlive) {
+                            System.out.println(ANSI_RED + "votee already dead");
+                            continue firstLoop;
+                        }
+                        else {
+                            players[objectReminder].setNumberOfVotes(players[objectReminder].getNumberOfVotes() + 1);
+                            ((Mafia) players[subjectReminder]).setVoted(true);
+                        }
+                    }
+                }
+
                 else if (players[subjectReminder] instanceof Doctor)
                     ((Doctor) players[subjectReminder]).save(subjectAndObject[1]);
-                else if (players[subjectReminder] instanceof Detective)
-                    ((Detective) players[subjectReminder]).detect(subjectAndObject[1]);
-                else if (players[subjectReminder] instanceof Silencer)
-                    players[objectReminder].setSilence(true);
+
+                else if (players[subjectReminder] instanceof Detective){
+                    if (!findUser(subjectAndObject[1])){
+                        System.out.println(ANSI_RED + "user not found");
+                        continue firstLoop;
+                    }
+                    else if (((Detective) players[subjectReminder]).isDetected()){
+                        System.out.println(ANSI_RED + "detective has already asked");
+                    }
+                    else {
+                        for (int i = 0; i < players.length; i++) {
+                            if (!players[i].isAlive()) {
+                                System.out.println(ANSI_RED + "suspect is dead");
+                                continue firstLoop;
+                            }
+                            else {
+                                if (players[objectReminder].isMafia() && !players[objectReminder].isGodfather())
+                                    System.out.println("Yes");
+                                else System.out.println("No");
+                            }
+                        }
+                    }
+                }
             }
             maxVote = 0;
             maxVotePlayer = 0;
@@ -234,6 +291,22 @@ public class Main {
                 if (players[i].getNumberOfVotes() == maxVote)
                     numberOfMaxVotePlayers++;
             }
+            if (numberOfMaxVotePlayers > 2){
+            }
+            else if (numberOfMaxVotePlayers == 2){
+                for (int i = 0; i < players.length; i++) {
+                    if (players[i].getNumberOfVotes() == maxVote) {
+                        if (players[i].isSavedByDoctor());
+                        else System.out.println("mafia tried to kill " + players[i].name + "\n" + players[i].name + " was killed");
+                    }
+                }
+            }
+            else if (numberOfMaxVotePlayers == 1){
+                if (players[maxVotePlayer].isSavedByDoctor())
+                    System.out.println("mafia tried to kill " + players[maxVotePlayer].name);
+                else System.out.println("mafia tried to kill" + players[maxVotePlayer].name + "\n" + players[maxVotePlayer].name + " was killer");
+            }
+            System.out.println("Silenced " + silenced);
         }
     }
 }
