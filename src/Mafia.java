@@ -1,10 +1,6 @@
 class Mafia extends Player{
     Mafia(String name){
-        super(name);
-        setMafia(true);
-        setAlive(true);
-        setHaveNightJob(true);
-        players[counter].name = name;
+        players[counter] = new Player(name);
         players[counter].setMafia(true);
         players[counter].setHaveNightJob(true);
         players[counter++].setAlive(true);

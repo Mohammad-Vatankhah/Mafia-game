@@ -1,11 +1,6 @@
 class Detective extends Player{
     Detective(String name){
-        super(name);
-        setDetective(true);
-        setVillager(true);
-        setAlive(true);
-        setHaveNightJob(true);
-        players[counter].name = name;
+        players[counter] = new Player(name);
         players[counter].setDetective(true);
         players[counter].setVillager(true);
         players[counter].setAlive(true);

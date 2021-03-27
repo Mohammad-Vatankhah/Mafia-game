@@ -1,6 +1,6 @@
-abstract class Player {
+class Player {
     protected String name;
-    protected Player[] players = new Player[50];
+    protected Player[] players;
     protected int counter = 0;
     protected int numberOfVotes;
     protected boolean isAlive;
@@ -18,6 +18,8 @@ abstract class Player {
     Player(String name){
         this.name = name;
     }
+
+    Player(){}
 
     public int getNumberOfVotes() {
         return numberOfVotes;
