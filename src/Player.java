@@ -15,6 +15,7 @@ class Player {
     protected boolean savedByDoctor;
     protected boolean getShot;
     protected boolean haveNightJob;
+    protected boolean silence;
     Player(String name){
         this.name = name;
     }
@@ -123,5 +124,13 @@ class Player {
 
     public void setHaveNightJob(boolean haveNightJob) {
         this.haveNightJob = haveNightJob;
+    }
+
+    public boolean isSilence() {
+        return silence;
+    }
+
+    public void setSilence(boolean silence) {
+        this.silence = silence;
     }
 }
