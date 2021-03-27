@@ -171,6 +171,30 @@ public class Main {
                     }
                 }
             }
+            System.out.println(ANSI_BLUE + "Night " + nightCounter++);
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].isHaveNightJob() && players[i].isAlive()){
+                    System.out.println(players[i].name + " : " + players[i].getRole());
+                }
+            }
+            firstLoop:while (true){
+                String nightOrder;
+                nightOrder = scan.nextLine();
+                int subjectReminder = 0;
+                int objectReminder = 0;
+                String[] subjectAndObject = nightOrder.split(" ");
+                for (int i = 0; i < players.length; i++) {
+                    if (subjectAndObject[0].equals(players[i].name)){
+                        if (!players[i].isHaveNightJob())
+                            System.out.println(ANSI_RED + " user can not wake up during night");
+                        else if (!players[i].isAlive()){
+                            System.out.println(ANSI_RED + "user is dead");
+                            continue firstLoop;
+                        }
+                        else subjectReminder = i;
+                    }
+                }
+            }
         }
     }
 }
