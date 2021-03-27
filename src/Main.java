@@ -138,46 +138,46 @@ public class Main {
                         System.out.println(ANSI_RED + "votee already dead");
                     else players[voteeReminder].setNumberOfVotes(players[voteeReminder].getNumberOfVotes() + 1);
                 }
-                int maxVote = 0;
-                int maxVotePlayer = 0;
-                for (int i = 0; i < players.length; i++) {
-                    if (players[i].getNumberOfVotes() > maxVote) {
-                        maxVote = players[i].getNumberOfVotes();
-                        maxVotePlayer = i;
-                    }
-                }
-                int numberOfMaxVotePlayers = 0;
-                for (Player player : players) {
-                    if (player.getNumberOfVotes() == maxVote)
-                        numberOfMaxVotePlayers++;
-                }
-                if (numberOfMaxVotePlayers > 1)
-                    System.out.println(ANSI_YELLOW + "nobody died");
-                else if (numberOfMaxVotePlayers == 1){
-                    if (players[maxVotePlayer].getRole().equals("joker")) {
-                        System.out.println(ANSI_YELLOW + "Joker WON!");
-                        System.exit(0);
-                    }
-                    else {
-                        players[maxVotePlayer].setAlive(false);
-                        resetVotes();
-                        if (players[maxVotePlayer].isMafia())
-                            numberOfMafias--;
-                        else if (players[maxVotePlayer].isVillager()) {
-                            numberOfVillagers--;
-                            System.out.println(ANSI_RESET + players[maxVotePlayer].name + ANSI_RED + " died");
-                        }
-                    }
-                    if (numberOfMafias == 0) {
-                        System.out.println(ANSI_GREEN + "Villagers WON!");
-                        System.exit(0);
-                    }
-                    else if (numberOfVillagers <= numberOfMafias) {
-                        System.out.println(ANSI_RED + "Mafia Won");
-                        System.exit(0);
-                    }
+            }
+            int maxVote = 0;
+            int maxVotePlayer = 0;
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getNumberOfVotes() > maxVote) {
+                    maxVote = players[i].getNumberOfVotes();
+                    maxVotePlayer = i;
                 }
             }
+            int numberOfMaxVotePlayers = 0;
+            for (Player player : players) {
+                if (player.getNumberOfVotes() == maxVote)
+                    numberOfMaxVotePlayers++;
+            }
+            if (numberOfMaxVotePlayers > 1)
+                System.out.println(ANSI_YELLOW + "nobody died");
+            else if (numberOfMaxVotePlayers == 1){
+                if (players[maxVotePlayer].getRole().equals("joker")) {
+                    System.out.println(ANSI_YELLOW + "Joker WON!");
+                    System.exit(0);
+                }
+                else {
+                    players[maxVotePlayer].setAlive(false);
+                    if (players[maxVotePlayer].isMafia())
+                        numberOfMafias--;
+                    else if (players[maxVotePlayer].isVillager()) {
+                        numberOfVillagers--;
+                        System.out.println(ANSI_RESET + players[maxVotePlayer].name + ANSI_RED + " died");
+                    }
+                }
+                if (numberOfMafias == 0) {
+                    System.out.println(ANSI_GREEN + "Villagers WON!");
+                    System.exit(0);
+                }
+                else if (numberOfVillagers <= numberOfMafias) {
+                    System.out.println(ANSI_RED + "Mafia Won");
+                    System.exit(0);
+                }
+            }
+            resetVotes();
             System.out.println(ANSI_BLUE + "Night " + nightCounter++);
             for (int i = 0; i < players.length; i++) {
                 if (players[i].isHaveNightJob() && players[i].isAlive()){
@@ -220,19 +220,19 @@ public class Main {
                     ((Detective) players[subjectReminder]).detect(subjectAndObject[1]);
                 else if (players[subjectReminder] instanceof Silencer)
                     players[objectReminder].setSilence(true);
-                int maxVote = 0;
-                int maxVotePlayer = 0;
-                for (int i = 0; i < players.length; i++) {
-                    if (players[i].getNumberOfVotes() > maxVote) {
-                        maxVote = players[i].getNumberOfVotes();
-                        maxVotePlayer = i;
-                    }
+            }
+            maxVote = 0;
+            maxVotePlayer = 0;
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getNumberOfVotes() > maxVote) {
+                    maxVote = players[i].getNumberOfVotes();
+                    maxVotePlayer = i;
                 }
-                int numberOfMaxVotePlayers = 0;
-                for (int i = 0; i < players.length; i++) {
-                    if (players[i].getNumberOfVotes() == maxVote)
-                        numberOfMaxVotePlayers++;
-                }
+            }
+            numberOfMaxVotePlayers = 0;
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getNumberOfVotes() == maxVote)
+                    numberOfMaxVotePlayers++;
             }
         }
     }
