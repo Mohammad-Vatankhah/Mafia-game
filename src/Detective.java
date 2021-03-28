@@ -1,5 +1,5 @@
 class Detective extends Player{
-    protected boolean detected;
+    protected int detected;
     Detective(String name){
         this.name = name;
         this.setDetective(true);
@@ -9,12 +9,12 @@ class Detective extends Player{
         this.setRole("detective");
     }
 
-    public boolean isDetected() {
+    public int isDetected() {
         return detected;
     }
 
-    public void setDetected(boolean detected) {
-        this.detected = detected;
+    public void setDetected(int detected) {
+        this.detected += detected;
     }
 }
 

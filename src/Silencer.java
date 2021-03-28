@@ -1,5 +1,5 @@
 class Silencer extends Player{
-    protected boolean silenced;
+    protected int silenced;
     Silencer(String name){
         this.name = name;
         this.setMafia(true);
@@ -15,11 +15,11 @@ class Silencer extends Player{
         }
     }
 
-    public boolean isSilenced() {
+    public int isSilenced() {
         return silenced;
     }
 
-    public void setSilenced(boolean silenced) {
-        this.silenced = silenced;
+    public void setSilenced(int silenced) {
+        this.silenced += silenced;
     }
 }
