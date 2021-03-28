@@ -142,19 +142,17 @@ public class Main {
                             System.out.println(ANSI_RED + "user not found");
                             continue;
                         }
-                        for (int i = 0; i < players.length; i++) {
-                            if (voterAndVotee[0].equals(players[i].name)) {
-                                if (players[i].isSilence()) {
+                        for (Player player : players) {
+                            if (voterAndVotee[0].equals(player.name)) {
+                                if (player.isSilence()) {
                                     System.out.println(ANSI_RED + "voter is silenced");
                                     continue firstLoop;
                                 }
-                            }
-                            else if (voterAndVotee[1].equals(players[i].name)){
-                                if (!players[i].isAlive()){
+                            } else if (voterAndVotee[1].equals(player.name)) {
+                                if (!player.isAlive()) {
                                     System.out.println(ANSI_RED + "votee already dead");
                                     continue firstLoop;
-                                }
-                                else players[i].setNumberOfVotes(players[i].getNumberOfVotes() + 1);
+                                } else player.setNumberOfVotes(player.getNumberOfVotes() + 1);
                             }
                         }
                     }
@@ -166,7 +164,7 @@ public class Main {
                 }
             }
 
-            //calculate who should be killed in the day
+            //check who should be killed in the day
             int maxVote = 0;
             int maxVotePlayer = 0;
             for (int i = 0; i < players.length; i++) {
@@ -200,7 +198,7 @@ public class Main {
                     }
                 }
             }
-                //calculate if mafia or villager win in the day
+                //check if mafia or villager win in the day
                 if (numberOfMafias == 0) {
                     System.out.println(ANSI_GREEN + "Villagers WON!");
                     System.exit(0);
@@ -313,7 +311,7 @@ public class Main {
                 }
             }
 
-            //calculate who should be killed in the night
+            //check who should be killed in the night
             maxVote = 0;
             maxVotePlayer = 0;
             for (int i = 0; i < players.length; i++) {
@@ -365,7 +363,7 @@ public class Main {
             }
             System.out.println("Silenced " + silenced);
 
-            //calculate if mafia or villager win in the night
+            //check if mafia or villager win in the night
             if (numberOfMafias == 0){
                 System.out.println(ANSI_GREEN + "Villager WON");
                 System.exit(0);
