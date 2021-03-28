@@ -1,5 +1,5 @@
 class Silencer extends Player{
-    protected int silenceCount = 1;
+    protected boolean silenceForFirstTime;
     Silencer(String name){
         this.name = name;
         this.setMafia(true);
@@ -9,11 +9,11 @@ class Silencer extends Player{
         this.setRole("silencer");
     }
 
-    public int getSilenceCount() {
-        return silenceCount;
+    public boolean isSilenceForFirstTime() {
+        return silenceForFirstTime;
     }
 
-    public void setSilenceCount(int silenced) {
-        this.silenceCount += silenceCount;
+    public void setSilenceCount(boolean silenced) {
+        this.silenceForFirstTime = silenced;
     }
 }

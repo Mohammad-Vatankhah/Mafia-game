@@ -1,7 +1,7 @@
 class Player {
     protected String name;
     protected String role;
-    protected int numberOfVotes;
+    protected int numberOfVotes = 0;
     protected boolean isAlive;
     protected boolean isMafia;
     protected boolean isJoker;
