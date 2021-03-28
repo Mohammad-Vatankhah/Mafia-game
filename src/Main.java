@@ -200,6 +200,10 @@ public class Main {
                     System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
                     break;
                 }
+                if (nightOrder.equals("get_game_state")){
+                    System.out.println(ANSI_RED + "Mafia = " + numberOfMafias);
+                    System.out.println(ANSI_GREEN + "Villager = " + numberOfVillagers);
+                }
                 int subjectReminder = 0;
                 int objectReminder = 0;
                 String[] subjectAndObject = nightOrder.split(" ");
@@ -262,6 +266,7 @@ public class Main {
                     }
                     else if (((Detective) players[subjectReminder]).isDetected()){
                         System.out.println(ANSI_RED + "detective has already asked");
+                        continue firstLoop;
                     }
                     else {
                         for (int i = 0; i < players.length; i++) {
@@ -271,13 +276,14 @@ public class Main {
                             }
                             else {
                                 if (players[objectReminder].isMafia() && !players[objectReminder].isGodfather())
-                                    System.out.println("Yes");
-                                else System.out.println("No");
+                                    System.out.println(ANSI_RED + "Yes");
+                                else System.out.println(ANSI_GREEN + "No");
                             }
                         }
                     }
                 }
             }
+
             maxVote = 0;
             maxVotePlayer = 0;
             for (int i = 0; i < players.length; i++) {
@@ -286,6 +292,7 @@ public class Main {
                     maxVotePlayer = i;
                 }
             }
+
             numberOfMaxVotePlayers = 0;
             for (int i = 0; i < players.length; i++) {
                 if (players[i].getNumberOfVotes() == maxVote)
@@ -294,19 +301,53 @@ public class Main {
             if (numberOfMaxVotePlayers > 2){
             }
             else if (numberOfMaxVotePlayers == 2){
+                int numberOfSavedByDoc = 0;
                 for (int i = 0; i < players.length; i++) {
                     if (players[i].getNumberOfVotes() == maxVote) {
-                        if (players[i].isSavedByDoctor());
-                        else System.out.println("mafia tried to kill " + players[i].name + "\n" + players[i].name + " was killed");
+                        if (players[i].isSavedByDoctor())
+                            numberOfSavedByDoc++;
+                    }
+                }
+
+                if (numberOfSavedByDoc == 0);
+                else if (numberOfSavedByDoc == 1){
+                    for (int i = 0; i < players.length; i++) {
+                        if (players[i].getNumberOfVotes() == maxVote && !players[i].isSavedByDoctor() && !players[i].isBulletproof()) {
+                            System.out.println(ANSI_RED + "mafia tried to kill " + ANSI_RESET + players[i].name + "\n" + players[i].name + " was killed");
+                            players[i].setAlive(false);
+                            numberOfVillagers--;
+                        }
+                        else if (players[i].getNumberOfVotes() == maxVote && !players[i].isSavedByDoctor() && players[i] instanceof Bulletproof){
+                            if (((Bulletproof) players[i]).isShotForFirstTime()){
+                                System.out.println(ANSI_RED + "mafia tried to kill " + ANSI_RESET + players[i].name + "\n" + players[i].name + " was killed");
+                                players[i].setAlive(false);
+                                numberOfVillagers--;
+                            }
+                            else ((Bulletproof) players[i]).setShotForFirstTime(true);
+                        }
                     }
                 }
             }
+
             else if (numberOfMaxVotePlayers == 1){
-                if (players[maxVotePlayer].isSavedByDoctor())
-                    System.out.println("mafia tried to kill " + players[maxVotePlayer].name);
-                else System.out.println("mafia tried to kill" + players[maxVotePlayer].name + "\n" + players[maxVotePlayer].name + " was killer");
+                if (players[maxVotePlayer].isSavedByDoctor());
+                else if (players[maxVotePlayer] instanceof Bulletproof){
+                    if (((Bulletproof) players[maxVotePlayer]).isShotForFirstTime()){
+                        System.out.println(ANSI_RED + "mafia tried to kill " + ANSI_RESET + players[maxVotePlayer].name + "\n" + players[maxVotePlayer].name + " was killed");
+                        numberOfVillagers--;
+                    }
+                    else ((Bulletproof) players[maxVotePlayer]).setShotForFirstTime(true); ;
+                }
             }
             System.out.println("Silenced " + silenced);
+            if (numberOfMafias == 0){
+                System.out.println(ANSI_GREEN + "Villager WON");
+                System.exit(0);
+            }
+            else if (numberOfMafias >= numberOfVillagers){
+                System.out.println(ANSI_RED + "Mafia WON");
+                System.exit(0);
+            }
         }
     }
 }

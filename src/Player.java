@@ -12,7 +12,6 @@ class Player {
     protected boolean isGodfather;
     protected boolean isSilencer;
     protected boolean savedByDoctor;
-    protected boolean getShot;
     protected boolean haveNightJob;
     protected boolean silence;
     Player(String name){
@@ -107,14 +106,6 @@ class Player {
 
     public void setSavedByDoctor(boolean savedByDoctor) {
         this.savedByDoctor = savedByDoctor;
-    }
-
-    public boolean isGetShot() {
-        return getShot;
-    }
-
-    public void setGetShot(boolean getShot) {
-        this.getShot = getShot;
     }
 
     public boolean isHaveNightJob() {
