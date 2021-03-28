@@ -117,7 +117,7 @@ public class Main {
         System.out.println(ANSI_RED + "Ready?" + ANSI_YELLOW + " Set!" + ANSI_GREEN + " Go.");
         System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
         while (true){
-            while (true){
+            firstLoop:while (true){
                 String voteOrder;
                 voteOrder = scan.nextLine();
 
@@ -134,28 +134,35 @@ public class Main {
                 //distinguish who is voter and who is votee in the day
                 else {
                     String[] voterAndVotee;
-                    int voterReminder = 0;
-                    int voteeReminder = 0;
                     voterAndVotee = voteOrder.split(" ");
                     if (voterAndVotee.length == 2) {
+
+                        //print error if something is wrong with voter or votee
+                        if (findUser(voterAndVotee[0]) || findUser(voterAndVotee[1])){
+                            System.out.println(ANSI_RED + "user not found");
+                            continue;
+                        }
                         for (int i = 0; i < players.length; i++) {
-                            if (voterAndVotee[0].equals(players[i].name))
-                                voterReminder = i;
-                            if (voterAndVotee[1].equals(players[i].name))
-                                voteeReminder = i;
+                            if (voterAndVotee[0].equals(players[i].name)) {
+                                if (players[i].isSilence()) {
+                                    System.out.println(ANSI_RED + "voter is silenced");
+                                    continue firstLoop;
+                                }
+                            }
+                            else if (voterAndVotee[1].equals(players[i].name)){
+                                if (!players[i].isAlive()){
+                                    System.out.println(ANSI_RED + "votee already dead");
+                                    continue firstLoop;
+                                }
+                                else players[i].setNumberOfVotes(players[i].getNumberOfVotes() + 1);
+                            }
                         }
                     }
-
-                    //print error if something is wrong with voter or votee
-                    if (players[voterReminder].isSilence())
-                        System.out.println(ANSI_RED + "voter is silenced");
-                    else if (!players[voteeReminder].isAlive())
-                        System.out.println(ANSI_RED + "votee already dead");
-                    else if (findUser(players[voterReminder].name))
-                        System.out.println(ANSI_RED + "user not found");
-                    else if (!players[voterReminder].isAlive())
-                        System.out.println(ANSI_RED + "voter already dead");
-                    else players[voteeReminder].setNumberOfVotes(players[voteeReminder].getNumberOfVotes() + 1);
+                }
+                // who was silenced in last round can speak and vote in the next round
+                for (Player player : players) {
+                    if (player.isSilence())
+                        player.setSilence(false);
                 }
             }
 
@@ -232,21 +239,27 @@ public class Main {
                     int subjectReminder = 0;
                     int objectReminder = 0;
                     String[] subjectAndObject = nightOrder.split(" ");
-                    for (int i = 0; i < players.length; i++) {
-                        if (subjectAndObject[0].equals(players[i].name)) {
-                            if (!players[i].isHaveNightJob()) {
-                                System.out.println(ANSI_RED + " user can not wake up during night");
-                                continue firstLoop;
-                            } else if (!players[i].isAlive()) {
-                                System.out.println(ANSI_RED + "user is dead");
-                                continue firstLoop;
-                            } else subjectReminder = i;
-                        }
-                        if (subjectAndObject[1].equals(players[i].name)) {
-                            if (!players[i].isAlive()) {
-                                System.out.println(ANSI_RED + "user is dead");
-                                continue firstLoop;
-                            } else objectReminder = i;
+                    if (findUser(subjectAndObject[0]) || findUser(subjectAndObject[1])){
+                        System.out.println(ANSI_RED + "user not found");
+                        continue;
+                    }
+                    else {
+                        for (int i = 0; i < players.length; i++) {
+                            if (subjectAndObject[0].equals(players[i].name)) {
+                                if (!players[i].isHaveNightJob()) {
+                                    System.out.println(ANSI_RED + " user can not wake up during night");
+                                    continue firstLoop;
+                                } else if (!players[i].isAlive()) {
+                                    System.out.println(ANSI_RED + "user is dead");
+                                    continue firstLoop;
+                                } else subjectReminder = i;
+                            }
+                            if (subjectAndObject[1].equals(players[i].name)) {
+                                if (!players[i].isAlive()) {
+                                    System.out.println(ANSI_RED + "user is dead");
+                                    continue firstLoop;
+                                } else objectReminder = i;
+                            }
                         }
                     }
 
@@ -360,12 +373,6 @@ public class Main {
             else if (numberOfMafias >= numberOfVillagers){
                 System.out.println(ANSI_RED + "Mafia WON");
                 System.exit(0);
-            }
-
-            // who was silenced in last round can speak and vote in the next round
-            for (Player player : players) {
-                if (player.isSilence())
-                    player.setSilence(false);
             }
         }
     }
