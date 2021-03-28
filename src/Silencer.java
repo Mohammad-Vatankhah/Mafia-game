@@ -1,5 +1,5 @@
 class Silencer extends Player{
-    protected int silenced;
+    protected int silenced = 1;
     Silencer(String name){
         this.name = name;
         this.setMafia(true);
@@ -7,12 +7,6 @@ class Silencer extends Player{
         this.setAlive(true);
         this.setHaveNightJob(true);
         this.setRole("silencer");
-    }
-    public void silence(String name){
-        for (int i = 0; i < Main.players.length; i++) {
-            if (name.equals(Main.players[i].name))
-                Main.players[i].setSilence(true);
-        }
     }
 
     public int isSilenced() {

@@ -1,5 +1,5 @@
 class Detective extends Player{
-    protected int detected;
+    protected int detected = 1;
     Detective(String name){
         this.name = name;
         this.setDetective(true);
