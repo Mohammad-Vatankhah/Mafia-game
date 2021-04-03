@@ -16,6 +16,8 @@ public class Main {
         for (Player player : players) {
             player.setNumberOfVotes(0);
             player.setSavedByDoctor(false);
+            if (player instanceof Mafia)
+                ((Mafia) player).setVoted(false);
         }
     }
 
@@ -284,7 +286,7 @@ public class Main {
                         ((Silencer) players[subjectReminder]).setSilenceForFirstTime(true);
 
                       //handle mafias actions in the night
-                    } else if (players[subjectReminder].isMafia()) {
+                    } else if (players[subjectReminder] instanceof Mafia) {
                         if (findUser(subjectAndObject[1])) {
                             System.out.println(ANSI_RED + "user not joined");
                         } else {
@@ -293,7 +295,20 @@ public class Main {
                                     if (!player.isAlive())
                                         System.out.println(ANSI_RED + "votee already dead");
                                     else {
-                                        player.setNumberOfVotes(player.getNumberOfVotes() + 1);
+                                        if (!((Mafia) players[subjectReminder]).isVoted()) {
+                                            ((Mafia) players[subjectReminder]).setVoteeName(players[objectReminder].name);
+                                            ((Mafia) players[subjectReminder]).setVoted(true);
+                                            player.setNumberOfVotes(player.getNumberOfVotes() + 1);
+                                        }
+                                            else if (((Mafia) players[subjectReminder]).isVoted()){
+                                            for (int i = 0; i < players.length; i++) {
+                                                if (((Mafia) players[subjectReminder]).getVoteeName().equals(players[i].name)) {
+                                                    players[i].setNumberOfVotes(players[i].getNumberOfVotes() - 1);
+                                                    ((Mafia) players[subjectReminder]).setVoteeName(players[objectReminder].name);
+                                                    players[objectReminder].setNumberOfVotes(players[objectReminder].getNumberOfVotes() + 1);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }

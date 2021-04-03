@@ -1,7 +1,7 @@
-class Silencer extends Player{
+class Silencer extends Mafia{
     protected boolean silenceForFirstTime = false;
     Silencer(String name){
-        this.name = name;
+        super(name);
         this.setMafia(true);
         this.setSilencer(true);
         this.setAlive(true);

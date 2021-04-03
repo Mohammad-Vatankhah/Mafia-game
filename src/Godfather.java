@@ -1,6 +1,6 @@
-class Godfather extends Player{
+class Godfather extends Mafia{
     Godfather(String name){
-        this.name = name;
+        super(name);
         this.setGodfather(true);
         this.setMafia(true);
         this.setHaveNightJob(true);
