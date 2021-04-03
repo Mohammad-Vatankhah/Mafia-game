@@ -5,11 +5,11 @@ public class Main {
     public static Player[] players;
 
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String PRINT_RESET = "\u001B[0m";
+    public static final String PRINT_RED = "\u001B[31m";
+    public static final String PRINT_GREEN = "\u001B[32m";
+    public static final String PRINT_YELLOW = "\u001B[33m";
+    public static final String PRINT_BLUE = "\u001B[34m";
 
     //reset votes and doctor actions
     public static void resetVotes(){
@@ -39,11 +39,11 @@ public class Main {
         int nightCounter = 1;
         String[] roles = {"joker", "villager", "detective", "doctor", "bulletproof", "mafia", "godfather", "silencer"};
         String order;
-        System.out.println("Welcome to " + ANSI_RED + "MAFIA" + "\n" + ANSI_RESET + "Enter 'create_game' and players name to start a new game");
+        System.out.println("Welcome to " + PRINT_RED + "MAFIA" + "\n" + PRINT_RESET + "Enter 'create_game' and players name to start a new game");
         order = scan.next();
         String names = scan.nextLine();
         while (!order.equals("create_game")) {
-            System.out.println(ANSI_RED + "no game created");
+            System.out.println(PRINT_RED + "no game created");
             order = scan.next();
             names = scan.nextLine();
         }
@@ -51,14 +51,14 @@ public class Main {
         String nameToAssign;
         String roleToAssign;
         players = new Player[namesArr.length - 1];
-        System.out.println(ANSI_RESET + "Enter 'assign_role' (player_name) (role_name) to assign the roles.");
+        System.out.println(PRINT_RESET + "Enter 'assign_role' (player_name) (role_name) to assign the roles.");
         for (int i = 0; i < namesArr.length - 1; ) {
             String assignOrder = scan.nextLine();
             String[] nameAndRoles = assignOrder.split(" ");
 
             //print error if we start the game before assign the roles
             if (nameAndRoles.length == 1) {
-                System.out.println(ANSI_RED + "one or more player do not have a role.");
+                System.out.println(PRINT_RED + "one or more player do not have a role.");
                 continue;
             }
             else {
@@ -82,7 +82,7 @@ public class Main {
 
             //print error if roles or player name entered incorrectly
             if (r1 == roles.length || r == namesArr.length) {
-                System.out.println(ANSI_RED + "user or role not found");
+                System.out.println(PRINT_RED + "user or role not found");
                 continue;
             }
 
@@ -116,20 +116,20 @@ public class Main {
             i++;
         }
 
-        System.out.println(ANSI_RESET + "Enter 'start_game' to start the game.");
+        System.out.println(PRINT_RESET + "Enter 'start_game' to start the game.");
         scan.nextLine();
         //print a list of players and their roles
         for (Player player : players) {
             if (player.isMafia())
-                System.out.println(ANSI_RESET + player.name + " : " + ANSI_RED + player.getRole());
+                System.out.println(PRINT_RESET + player.name + " : " + PRINT_RED + player.getRole());
             else if (player.isVillager())
-                System.out.println(ANSI_RESET + player.name + " : " + ANSI_GREEN + player.getRole());
+                System.out.println(PRINT_RESET + player.name + " : " + PRINT_GREEN + player.getRole());
             else if (player.isJoker())
-                System.out.println(ANSI_RESET + player.name + " : " + ANSI_YELLOW + player.getRole());
+                System.out.println(PRINT_RESET + player.name + " : " + PRINT_YELLOW + player.getRole());
         }
 
-        System.out.println(ANSI_RED + "Ready?" + ANSI_YELLOW + " Set!" + ANSI_GREEN + " Go.");
-        System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
+        System.out.println(PRINT_RED + "Ready?" + PRINT_YELLOW + " Set!" + PRINT_GREEN + " Go.");
+        System.out.println(PRINT_YELLOW + "Day " + dayCounter++);
         while (true){
             resetVotes();
             firstLoop:while (true){
@@ -142,8 +142,8 @@ public class Main {
 
                 //print game state
                 else if (voteOrder.equals("get_game_state")) {
-                    System.out.println(ANSI_RED + "Mafia = " + numberOfMafias);
-                    System.out.println(ANSI_GREEN + "Villager = " + numberOfVillagers);
+                    System.out.println(PRINT_RED + "Mafia = " + numberOfMafias);
+                    System.out.println(PRINT_GREEN + "Villager = " + numberOfVillagers);
                 }
 
                 //distinguish who is voter and who is votee in the day
@@ -154,18 +154,18 @@ public class Main {
 
                         //print error if something is wrong with voter or votee
                         if (findUser(voterAndVotee[0]) || findUser(voterAndVotee[1])){
-                            System.out.println(ANSI_RED + "user not found");
+                            System.out.println(PRINT_RED + "user not found");
                             continue;
                         }
                         for (Player player : players) {
                             if (voterAndVotee[0].equals(player.name)) {
                                 if (player.isSilence()) {
-                                    System.out.println(ANSI_RED + "voter is silenced");
+                                    System.out.println(PRINT_RED + "voter is silenced");
                                     continue firstLoop;
                                 }
                             } else if (voterAndVotee[1].equals(player.name)) {
                                 if (!player.isAlive()) {
-                                    System.out.println(ANSI_RED + "votee already dead");
+                                    System.out.println(PRINT_RED + "votee already dead");
                                     continue firstLoop;
                                 } else player.setNumberOfVotes(player.getNumberOfVotes() + 1);
                             }
@@ -192,14 +192,14 @@ public class Main {
 
             //print day report
             if (numberOfMaxVotePlayers > 1)
-                System.out.println(ANSI_YELLOW + "nobody died");
+                System.out.println(PRINT_YELLOW + "nobody died");
 
             else if (numberOfMaxVotePlayers == 1) {
                 if (players[maxVotePlayer].getRole().equals("joker")) {
-                    System.out.println(ANSI_YELLOW + "Joker WON!");
+                    System.out.println(PRINT_YELLOW + "Joker WON!");
                     System.exit(0);
                 } else {
-                    System.out.println(ANSI_RESET + players[maxVotePlayer].name + ANSI_RED + " died");
+                    System.out.println(PRINT_RESET + players[maxVotePlayer].name + PRINT_RED + " died");
                     players[maxVotePlayer].setAlive(false);
                     if (players[maxVotePlayer].isMafia())
                         numberOfMafias--;
@@ -210,11 +210,11 @@ public class Main {
             }
                 //check if mafia or villager win in the day
                 if (numberOfMafias == 0) {
-                    System.out.println(ANSI_GREEN + "Villagers WON!");
+                    System.out.println(PRINT_GREEN + "Villagers WON!");
                     System.exit(0);
                 }
                 else if (numberOfVillagers <= numberOfMafias) {
-                    System.out.println(ANSI_RED + "Mafia Won");
+                    System.out.println(PRINT_RED + "Mafia Won");
                     System.exit(0);
                 }
 
@@ -228,7 +228,7 @@ public class Main {
                     ((Silencer) player).setSilenceForFirstTime(false);
             }
 
-            System.out.println(ANSI_BLUE + "Night " + nightCounter++);
+            System.out.println(PRINT_BLUE + "Night " + nightCounter++);
             for (Player player : players) {
                 if (player.isHaveNightJob() && player.isAlive()) {
                     System.out.println(player.name + " : " + player.getRole());
@@ -241,14 +241,14 @@ public class Main {
                 nightOrder = scan.nextLine();
 
                 if (nightOrder.equals("end_night")) {
-                    System.out.println(ANSI_YELLOW + "Day " + dayCounter++);
+                    System.out.println(PRINT_YELLOW + "Day " + dayCounter++);
                     break;
                 }
 
                 //print game state
                 if (nightOrder.equals("get_game_state")) {
-                    System.out.println(ANSI_RED + "Mafia = " + numberOfMafias);
-                    System.out.println(ANSI_GREEN + "Villager = " + numberOfVillagers);
+                    System.out.println(PRINT_RED + "Mafia = " + numberOfMafias);
+                    System.out.println(PRINT_GREEN + "Villager = " + numberOfVillagers);
 
                   //handle night orders
                 } else {
@@ -256,23 +256,23 @@ public class Main {
                     int objectReminder = 0;
                     String[] subjectAndObject = nightOrder.split(" ");
                     if (findUser(subjectAndObject[0]) || findUser(subjectAndObject[1])){
-                        System.out.println(ANSI_RED + "user not found");
+                        System.out.println(PRINT_RED + "user not found");
                         continue;
                     }
                     else {
                         for (int i = 0; i < players.length; i++) {
                             if (subjectAndObject[0].equals(players[i].name)) {
                                 if (!players[i].isHaveNightJob()) {
-                                    System.out.println(ANSI_RED + " user can not wake up during night");
+                                    System.out.println(PRINT_RED + " user can not wake up during night");
                                     continue firstLoop;
                                 } else if (!players[i].isAlive()) {
-                                    System.out.println(ANSI_RED + "user is dead");
+                                    System.out.println(PRINT_RED + "user is dead");
                                     continue firstLoop;
                                 } else subjectReminder = i;
                             }
                             if (subjectAndObject[1].equals(players[i].name)) {
                                 if (!players[i].isAlive()) {
-                                    System.out.println(ANSI_RED + "user is dead");
+                                    System.out.println(PRINT_RED + "user is dead");
                                     continue firstLoop;
                                 } else objectReminder = i;
                             }
@@ -288,12 +288,12 @@ public class Main {
                       //handle mafias actions in the night
                     } else if (players[subjectReminder] instanceof Mafia) {
                         if (findUser(subjectAndObject[1])) {
-                            System.out.println(ANSI_RED + "user not joined");
+                            System.out.println(PRINT_RED + "user not joined");
                         } else {
                             for (Player player : players) {
                                 if (subjectAndObject[1].equals(player.name)) {
                                     if (!player.isAlive())
-                                        System.out.println(ANSI_RED + "votee already dead");
+                                        System.out.println(PRINT_RED + "votee already dead");
                                     else {
                                         if (!((Mafia) players[subjectReminder]).isVoted()) {
                                             ((Mafia) players[subjectReminder]).setVoteeName(players[objectReminder].name);
@@ -321,17 +321,17 @@ public class Main {
                     //handle detective actions in the night
                     else if (players[subjectReminder] instanceof Detective) {
                         if (findUser(subjectAndObject[1])) {
-                            System.out.println(ANSI_RED + "user not found");
+                            System.out.println(PRINT_RED + "user not found");
                         } else if (((Detective) players[subjectReminder]).isDetected() + 1 > nightCounter) {
-                            System.out.println(ANSI_RED + "detective has already asked");
+                            System.out.println(PRINT_RED + "detective has already asked");
                         } else {
                             if (!players[objectReminder].isAlive()) {
-                                System.out.println(ANSI_RED + "suspect is dead");
+                                System.out.println(PRINT_RED + "suspect is dead");
                             } else {
                                 if (players[objectReminder].isMafia() && !players[objectReminder].isGodfather()) {
-                                    System.out.println(ANSI_RED + "Yes");
+                                    System.out.println(PRINT_RED + "Yes");
                                 } else {
-                                    System.out.println(ANSI_GREEN + "No");
+                                    System.out.println(PRINT_GREEN + "No");
                                 }
                                 ((Detective) players[subjectReminder]).setDetected(1);
                             }
@@ -359,7 +359,7 @@ public class Main {
                 int numberOfSavedByDoc = 0;
                 for (Player player : players) {
                     if (player.getNumberOfVotes() == maxVote) {
-                        System.out.println(ANSI_RED + "mafia" + ANSI_RESET + " tried to kill " + player.name);
+                        System.out.println(PRINT_RED + "mafia" + PRINT_RESET + " tried to kill " + player.name);
                         if (player.isSavedByDoctor())
                             numberOfSavedByDoc++;
                     }
@@ -367,12 +367,12 @@ public class Main {
                 if (numberOfSavedByDoc == 1){
                     for (Player player : players) {
                         if (player.getNumberOfVotes() == maxVote && !player.isSavedByDoctor() && !player.isBulletproof()) {
-                            System.out.println(ANSI_RESET + player.name + " was" + ANSI_RED + " killed");
+                            System.out.println(PRINT_RESET + player.name + " was" + PRINT_RED + " killed");
                             player.setAlive(false);
                             numberOfVillagers--;
                         } else if (player.getNumberOfVotes() == maxVote && !player.isSavedByDoctor() && player instanceof Bulletproof) {
                             if (((Bulletproof) player).isShotForFirstTime()) {
-                                System.out.println(ANSI_RESET + player.name + " was" + ANSI_RED + " killed");
+                                System.out.println(PRINT_RESET + player.name + " was" + PRINT_RED + " killed");
                                 player.setAlive(false);
                                 numberOfVillagers--;
                             } else ((Bulletproof) player).setShotForFirstTime(true);
@@ -382,28 +382,28 @@ public class Main {
             }
 
             else if (numberOfMaxVotePlayers == 1){
-                System.out.println(ANSI_RED + "mafia" + ANSI_RESET + " tried to kill " + players[maxVotePlayer].name );
+                System.out.println(PRINT_RED + "mafia" + PRINT_RESET + " tried to kill " + players[maxVotePlayer].name );
                 if (players[maxVotePlayer].isSavedByDoctor());
                 else if (players[maxVotePlayer] instanceof Bulletproof){
                     if (((Bulletproof) players[maxVotePlayer]).isShotForFirstTime()){
-                        System.out.println(players[maxVotePlayer].name + " was" + ANSI_RED + " killed");
+                        System.out.println(players[maxVotePlayer].name + " was" + PRINT_RED + " killed");
                         numberOfVillagers--;
                     }
                     else ((Bulletproof) players[maxVotePlayer]).setShotForFirstTime(true);
                 }
                 else {
-                    System.out.println(players[maxVotePlayer].name + " was" + ANSI_RED +  " killed");
+                    System.out.println(players[maxVotePlayer].name + " was" + PRINT_RED +  " killed");
                 }
             }
-            System.out.println(ANSI_YELLOW + "Silenced " + silenced);
+            System.out.println(PRINT_YELLOW + "Silenced " + silenced);
 
             //check if mafia or villager win in the night
             if (numberOfMafias == 0){
-                System.out.println(ANSI_GREEN + "Villager WON");
+                System.out.println(PRINT_GREEN + "Villager WON");
                 System.exit(0);
             }
             else if (numberOfMafias >= numberOfVillagers){
-                System.out.println(ANSI_RED + "Mafia WON");
+                System.out.println(PRINT_RED + "Mafia WON");
                 System.exit(0);
             }
         }
